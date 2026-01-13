@@ -1,3 +1,4 @@
+// /services/productService.js
 const slugify = require('slugify');
 const ApiError = require('@utils/ApiError');
 const ApiFeatures = require('@utils/ApiFeatures');
@@ -38,10 +39,7 @@ exports.getProduct = asyncHandler(async (req, res, next) => {
 // @access  Private
 exports.createProduct = asyncHandler(async (req, res) => {
   req.body.slug = slugify(req.body.title);
-  const product = await Product.create(req.body).populate({
-    path: 'category',
-    select: 'name -_id',
-  });
+  const product = await Product.create(req.body)
   res.status(201).json({ data: product });
 });
 

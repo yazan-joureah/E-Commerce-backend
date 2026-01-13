@@ -8,7 +8,7 @@ const createApp = require('./app');
 const logger = require('@utils/logger');
 const setupGracefulShutdown = require('./shutdown');
 
-// Load env from root config.env (adjust if your file location differs)
+// Load env from root config.env
 dotenv.config({ path: path.join(__dirname, 'config.env') });
 
 // Validate env (throws on missing/invalid required vars)
