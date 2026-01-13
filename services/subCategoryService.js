@@ -1,6 +1,7 @@
 // /services/subCategoryService.js
 const slugify = require('slugify');
 const ApiError = require('@utils/ApiError');
+const ApiFeatures = require('@utils/ApiFeatures');
 const asyncHandler = require('express-async-handler');
 const SubCategory = require('@models/subCategoryModel');
 const { getPagination } = require('@utils/paginationHelper');
@@ -11,19 +12,19 @@ const { getPagination } = require('@utils/paginationHelper');
 // @access  Public
 exports.getSubCategories = asyncHandler(async (req, res) => {
   const filter = req.params.categoryId ? { category: req.params.categoryId } : {};
+  const countDocuments = await SubCategory.countDocuments(filter);
 
-  const { page, limit, skip } = getPagination(req.query);
+  const apiFeatures = new ApiFeatures(SubCategory.find(filter), req.query)
+    .paginate(countDocuments);
 
-  const subCategories = await SubCategory.find(filter).skip(skip).limit(limit);
-
-  const total = await SubCategory.countDocuments(filter);
+  const { mongooseQuery, paginationResult } = apiFeatures;
+  const subCategories = await mongooseQuery;
 
   res.status(200).json({
     status: 'success',
     results: subCategories.length,
-    page,
-    totalPages: Math.ceil(total / limit),
-    data: subCategories,
+    paginationResult,
+    data: subCategories
   });
 });
 
@@ -31,17 +32,15 @@ exports.getSubCategories = asyncHandler(async (req, res) => {
 // @route   POST /api/v1/sub-categories
 // @access  Private
 exports.createSubCategory = asyncHandler(async (req, res) => {
-  const { name, category } = req.body;
-
   const subCategory = await SubCategory.create({
-    name,
-    slug: slugify(name),
-    category,
+    name: req.body.name,
+    slug: slugify(req.body.name),
+    category: req.body.category
   });
 
   res.status(201).json({
     status: 'success',
-    data: subCategory,
+    data: subCategory
   });
 });
 
@@ -49,16 +48,15 @@ exports.createSubCategory = asyncHandler(async (req, res) => {
 // @route   GET /api/v1/sub-categories/:id
 // @access  Public
 exports.getSubCategory = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  const subCategory = await SubCategory.findById(id);
+  const subCategory = await SubCategory.findById(req.params.id);
 
   if (!subCategory) {
-    return next(new ApiError(`No sub-category found for id: ${id}`, 404));
+    return next(new ApiError(`No sub-category found with id: ${req.params.id}`, 404));
   }
 
   res.status(200).json({
     status: 'success',
-    data: subCategory,
+    data: subCategory
   });
 });
 
@@ -66,22 +64,23 @@ exports.getSubCategory = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/v1/sub-categories/:id
 // @access  Private
 exports.updateSubCategory = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  const { name, category } = req.body;
-
   const subCategory = await SubCategory.findByIdAndUpdate(
-    id,
-    { name, slug: slugify(name), category },
+    req.params.id,
+    {
+      name: req.body.name,
+      slug: slugify(req.body.name),
+      category: req.body.category
+    },
     { new: true, runValidators: true }
   );
 
   if (!subCategory) {
-    return next(new ApiError(`No sub-category found for id: ${id}`, 404));
+    return next(new ApiError(`No sub-category found with id: ${req.params.id}`, 404));
   }
 
   res.status(200).json({
     status: 'success',
-    data: subCategory,
+    data: subCategory
   });
 });
 
@@ -89,12 +88,10 @@ exports.updateSubCategory = asyncHandler(async (req, res, next) => {
 // @route   DELETE /api/v1/sub-categories/:id
 // @access  Private
 exports.deleteSubCategory = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-
-  const subCategory = await SubCategory.findByIdAndDelete(id);
+  const subCategory = await SubCategory.findByIdAndDelete(req.params.id);
 
   if (!subCategory) {
-    return next(new ApiError(`No sub-category found for id: ${id}`, 404));
+    return next(new ApiError(`No sub-category found with id: ${req.params.id}`, 404));
   }
 
   res.status(204).send();
