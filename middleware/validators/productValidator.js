@@ -1,5 +1,6 @@
 const { body, check, query } = require('express-validator');
 const mongoose = require('mongoose');
+const { default: slugify } = require('slugify');
 
 const runValidation = require('@utils/baseValidator');
 const Category = require('@models/categoryModel');
@@ -18,7 +19,10 @@ exports.validateCreateProduct = runValidation([
   body('title')
     .trim()
     .isLength({ min: 3, max: 50 })
-    .withMessage('Title must be 3–50 chars')
+    .withMessage('Title must be 3–50 chars').custom((val,{req})=>{
+          req.body.slug= slugify(val)
+          return true;
+        })
     .escape(),
 
   // description
@@ -173,7 +177,10 @@ exports.validateUpdateProduct = runValidation([
     .optional()
     .trim()
     .isLength({ min: 3, max: 50 })
-    .withMessage('Title must be 3–50 chars')
+    .withMessage('Title must be 3–50 chars').custom((val,{req})=>{
+          req.body.slug= slugify(val)
+          return true;
+        })
     .escape(),
 
   // description

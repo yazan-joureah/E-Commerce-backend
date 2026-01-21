@@ -10,7 +10,7 @@ const {
 } = require('@services/categoryService');
 
 const {
-  validateCreateCategory,
+  validateCreateUpdateCategory,
   validateId,
   validatePagination,
 } = require('@middleware/validators/categoryValidator');
@@ -24,12 +24,12 @@ router.use('/:categoryId/sub-categories', subCategoryApi);
 router
   .route('/')
   .get(validatePagination, getCategories)
-  .post(validateCreateCategory, createCategory);
+  .post(validateCreateUpdateCategory, createCategory);
 
 router
   .route('/:id')
   .get(validateId, getCategory)
-  .put(validateId, validateCreateCategory, updateCategory)
+  .put(validateId, validateCreateUpdateCategory, updateCategory)
   .delete(validateId, deleteCategory);
 
 module.exports = router;

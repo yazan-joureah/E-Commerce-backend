@@ -10,19 +10,19 @@ const {
 } = require('@services/brandService');
 
 const {
-  validateCreateBrand,
+  validateCreateUpdateBrand,
   validateId,
   validatePagination,
 } = require('@middleware/validators/brandValidator');
 
 const router = express.Router();
 
-router.route('/').get(validatePagination, getBrands).post(validateCreateBrand, createBrand);
+router.route('/').get(validatePagination, getBrands).post(validateCreateUpdateBrand, createBrand);
 
 router
   .route('/:id')
   .get(validateId, getBrand)
-  .put(validateId, validateCreateBrand, updateBrand)
+  .put(validateId, validateCreateUpdateBrand, updateBrand)
   .delete(validateId, deleteBrand);
 
 module.exports = router;
