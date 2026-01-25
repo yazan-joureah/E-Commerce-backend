@@ -1,3 +1,4 @@
+const path = require('path')
 
 // app.js
 const express = require('express');
@@ -60,6 +61,7 @@ module.exports = function createApp(env) {
 
   // Sanitize input
   app.use(sanitizeRequest);
+  app.use(express.static(path.join(__dirname,'uploads')))
 
   // Dev logging using morgan
   if (env.NODE_ENV === 'development') {

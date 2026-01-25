@@ -10,19 +10,24 @@ const {
 } = require('@services/brandService');
 
 const {
-  validateCreateBrand,
+  validateCreateUpdateBrand,
   validateId,
   validatePagination,
 } = require('@middleware/validators/brandValidator');
 
+const { uploadSingleImage } = require('@middleware/uploadImages');
+
+
 const router = express.Router();
 
-router.route('/').get(validatePagination, getBrands).post(validateCreateBrand, createBrand);
+router.route('/')
+.get(validatePagination, getBrands)
+.post(uploadSingleImage('brands','image'),validateCreateUpdateBrand, createBrand);
 
 router
   .route('/:id')
   .get(validateId, getBrand)
-  .put(validateId, validateCreateBrand, updateBrand)
+  .put(validateId,uploadSingleImage('brands','image'), validateCreateUpdateBrand, updateBrand)
   .delete(validateId, deleteBrand);
 
 module.exports = router;

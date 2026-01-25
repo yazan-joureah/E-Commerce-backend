@@ -25,7 +25,10 @@
     "mongo-sanitize": "^1.1.0",
     "mongoose": "^8.17.0",
     "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "sharp": "^0.34.5",
     "slugify": "^1.6.6",
+    "uuid": "^13.0.0",
     "winston": "^3.17.0"
   },
   "devDependencies": {

@@ -1,7 +1,8 @@
 const { body, query, check } = require('express-validator');
 const runValidation = require('@utils/baseValidator');
+const { default: slugify } = require('slugify');
 
-exports.validateCreateCategory = runValidation([
+exports.validateCreateUpdateCategory = runValidation([
   body('name')
     .trim()
     .notEmpty()
@@ -9,7 +10,10 @@ exports.validateCreateCategory = runValidation([
     .isLength({ min: 2, max: 50 })
     .withMessage('Name must be 2–50 characters long')
     .matches(/^[\w\s-]+$/)
-    .withMessage('Name must contain only letters, numbers, dashes, or spaces')
+    .withMessage('Name must contain only letters, numbers, dashes, or spaces').custom((val,{req})=>{
+          req.body.slug= slugify(val)
+          return true;
+        })
     .escape(),
 ]);
 

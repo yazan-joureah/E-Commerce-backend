@@ -7,13 +7,18 @@ const {
   createCategory,
   updateCategory,
   deleteCategory,
+  
+  
 } = require('@services/categoryService');
 
 const {
-  validateCreateCategory,
+  validateCreateUpdateCategory,
   validateId,
   validatePagination,
 } = require('@middleware/validators/categoryValidator');
+
+const { uploadSingleImage } = require('@middleware/uploadImages');
+
 
 const subCategoryApi = require('@api/subCategoryApi');
 
@@ -24,12 +29,12 @@ router.use('/:categoryId/sub-categories', subCategoryApi);
 router
   .route('/')
   .get(validatePagination, getCategories)
-  .post(validateCreateCategory, createCategory);
+  .post(uploadSingleImage('categories', 'image'),validateCreateUpdateCategory, createCategory);
 
 router
   .route('/:id')
   .get(validateId, getCategory)
-  .put(validateId, validateCreateCategory, updateCategory)
+  .put(validateId, validateCreateUpdateCategory, updateCategory)
   .delete(validateId, deleteCategory);
 
 module.exports = router;

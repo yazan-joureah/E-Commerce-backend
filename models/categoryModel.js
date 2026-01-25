@@ -19,6 +19,20 @@ const CategorySchema = new mongoose.Schema(
   { timestamps: true }
 ); // Corrected option
 
+const returnURL = (doc)=>{
+  if(doc.image){
+    const imageURL = `${process.env.BASE_URL}/categories/${doc.image}`;
+    doc.image = imageURL;
+  }
+}
+
+CategorySchema.post('init',(doc)=>{
+  returnURL(doc);
+})
+
+CategorySchema.post('save',(doc)=>{
+  returnURL(doc)
+})
 // 2- Create models
 const CategoryModel = mongoose.model('Category', CategorySchema);
 

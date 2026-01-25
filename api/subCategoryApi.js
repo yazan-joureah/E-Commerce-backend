@@ -9,7 +9,7 @@ const {
 } = require('@services/subCategoryService');
 
 const {
-  validateCreateSubCategory,
+  validateCreateUpdateSubCategory,
   validateId,
   validatePagination,
 } = require('@middleware/validators/subCategoryValidator');
@@ -19,12 +19,12 @@ const router = express.Router({ mergeParams: true });
 router
   .route('/')
   .get(validatePagination, getSubCategories)
-  .post(validateCreateSubCategory, createSubCategory);
+  .post(validateCreateUpdateSubCategory, createSubCategory);
 
 router
   .route('/:id')
   .get(validateId, getSubCategory)
-  .put(validateId, validateCreateSubCategory, updateSubCategory)
+  .put(validateId, validateCreateUpdateSubCategory, updateSubCategory)
   .delete(validateId, deleteSubCategory);
 
 module.exports = router;
