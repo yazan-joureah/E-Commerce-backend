@@ -1,6 +1,10 @@
 const ApiError = require('@utils/ApiError');
 const ApiFeatures = require('@utils/ApiFeatures');
 const asyncHandler = require('express-async-handler');
+<<<<<<< HEAD
+=======
+const { Model } = require('mongoose');
+>>>>>>> 0d069d1694a940c82f499278be06ae254d02fbc2
 
 exports.deleteOne = Model => asyncHandler(async (req, res, next) => {
   const document = await Model.findByIdAndDelete(req.params.id);

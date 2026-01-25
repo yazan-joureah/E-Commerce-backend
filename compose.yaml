@@ -10,11 +10,20 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
+<<<<<<< HEAD
       MONGO_INITDB_DATABASE: ecommerce
     volumes:
       - mongodb_data:/data/db
     networks:
       - ecommerce-network  # CHANGED: Now on the main network
+=======
+      MONGO_INITDB_DATABASE: ecommerce  # Add default database
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - mongo-network
+    # Add this command to bind to all interfaces
+>>>>>>> 0d069d1694a940c82f499278be06ae254d02fbc2
     command: ["mongod", "--bind_ip_all"]
 
   mongo-express:
@@ -65,5 +74,9 @@ volumes:
 
 # DEFINE ONLY ONE NETWORK
 networks:
+<<<<<<< HEAD
   ecommerce-network:
+=======
+  mongo-network:
+>>>>>>> 0d069d1694a940c82f499278be06ae254d02fbc2
     driver: bridge

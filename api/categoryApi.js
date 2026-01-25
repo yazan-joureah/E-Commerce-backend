@@ -29,7 +29,11 @@ router.use('/:categoryId/sub-categories', subCategoryApi);
 router
   .route('/')
   .get(validatePagination, getCategories)
+<<<<<<< HEAD
   .post(uploadSingleImage('categories', 'image'),validateCreateUpdateCategory, createCategory);
+=======
+  .post(validateCreateUpdateCategory, createCategory);
+>>>>>>> 0d069d1694a940c82f499278be06ae254d02fbc2
 
 router
   .route('/:id')
