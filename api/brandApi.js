@@ -16,26 +16,19 @@ const {
 } = require('@middleware/validators/brandValidator');
 
 const { uploadSingleImage } = require('@middleware/uploadImages');
+const { auth } = require('@services/authService');
 
 
 const router = express.Router();
 
-<<<<<<< HEAD
 router.route('/')
 .get(validatePagination, getBrands)
-.post(uploadSingleImage('brands','image'),validateCreateUpdateBrand, createBrand);
-=======
-router.route('/').get(validatePagination, getBrands).post(validateCreateUpdateBrand, createBrand);
->>>>>>> 0d069d1694a940c82f499278be06ae254d02fbc2
+.post(uploadSingleImage('brands','image'),auth,validateCreateUpdateBrand, createBrand);
 
 router
   .route('/:id')
   .get(validateId, getBrand)
-<<<<<<< HEAD
-  .put(validateId,uploadSingleImage('brands','image'), validateCreateUpdateBrand, updateBrand)
-=======
-  .put(validateId, validateCreateUpdateBrand, updateBrand)
->>>>>>> 0d069d1694a940c82f499278be06ae254d02fbc2
-  .delete(validateId, deleteBrand);
+  .put(uploadSingleImage('brands','image'),auth,validateId, validateCreateUpdateBrand, updateBrand)
+  .delete(auth,validateId, deleteBrand);
 
 module.exports = router;

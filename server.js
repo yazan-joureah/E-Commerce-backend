@@ -2,14 +2,16 @@
 require('module-alias/register'); // must be first if you use aliases
 const path = require('path');
 const dotenv = require('dotenv');
+
+
+// Load env from root config.env
+dotenv.config({ path: path.join(__dirname, 'config.env') });
+
 const validateEnv = require('@config/env');
 const dbConnection = require('@config/database');
 const createApp = require('./app');
 const logger = require('@utils/logger');
 const setupGracefulShutdown = require('./shutdown');
-
-// Load env from root config.env
-dotenv.config({ path: path.join(__dirname, 'config.env') });
 
 // Validate env (throws on missing/invalid required vars)
 const env = validateEnv();
